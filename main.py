@@ -4,14 +4,23 @@ print("\n*** Prosty system księgowy/magazyn ***\n")
 
 print("Witaj w programie księgowo-magazynowym.")
 
+def give_operation_date():
+    present_date = datetime.now()
+    return present_date.strftime("%d-%m-%Y %H:%M:%S")
+
+
 amount_in_account = 0  # Stan konta
 warehouse = {}  # Słownik - magazyn
 operation_history = []
 
+# Odczytanie danych z plików
+with open("data_amount_in_account.txt") as file_stream:
+    amount_in_account = file_stream.readline()
 
-def give_operation_date():
-    present_date = datetime.now()
-    return present_date.strftime("%d-%m-%Y %H:%M:%S")
+try:
+    amount_in_account = float(amount_in_account)
+except:
+    print("Niepoprawne dane wejściowe.")
 
 
 while True:
@@ -239,11 +248,10 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
                       f'{operation["Opis operacji"]}')
 
     elif menu_command == "8" or menu_command == "koniec":
-        # with open("data.txt", "a") as file_stream:
-        #     file_stream.write("AAAAAAAA\nnowa linia")
-        #     print(file_stream)
-        #
-        # print("Poporawnie zapisano dane.")
+        with open("data_amount_in_account.txt", "w") as file_stream:
+            file_stream.write(str(amount_in_account))
+
+        print("Poporawnie zapisano dane.")
         break
 
     else:

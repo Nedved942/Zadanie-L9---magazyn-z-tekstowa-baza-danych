@@ -33,6 +33,12 @@ try:
 except FileNotFoundError:
     print("Nie pobrano danych z pliku.")
 
+try:
+    with open("operation_history.json") as file_stream:
+        operation_history = loads(file_stream.read())
+except FileNotFoundError:
+    print("Nie pobrano danych z pliku.")
+
 while True:
     menu_command = input("""
 Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
@@ -263,6 +269,9 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
 
         with open("warehouse.json", "w") as file_stream:
             file_stream.write(dumps(warehouse))
+
+        with open("operation_history.json", "w") as file_stream:
+            file_stream.write(dumps(operation_history))
 
         print("Poporawnie zapisano dane.")
         break

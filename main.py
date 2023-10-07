@@ -1,8 +1,10 @@
 from datetime import datetime
+from json import dumps, loads
 
 print("\n*** Prosty system księgowy/magazyn ***\n")
 
 print("Witaj w programie księgowo-magazynowym.")
+
 
 def give_operation_date():
     present_date = datetime.now()
@@ -14,14 +16,22 @@ warehouse = {}  # Słownik - magazyn
 operation_history = []
 
 # Odczytanie danych z plików
-with open("data_amount_in_account.txt") as file_stream:
-    amount_in_account = file_stream.readline()
+try:
+    with open("data_amount_in_account.txt") as file_stream:
+        amount_in_account = file_stream.readline()
+except FileNotFoundError:
+    print("Nie pobrano danych z pliku.")
 
 try:
     amount_in_account = float(amount_in_account)
-except:
+except ValueError:
     print("Niepoprawne dane wejściowe.")
 
+try:
+    with open("warehouse.json") as file_stream:
+        warehouse = loads(file_stream.read())
+except FileNotFoundError:
+    print("Nie pobrano danych z pliku.")
 
 while True:
     menu_command = input("""
@@ -250,6 +260,9 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
     elif menu_command == "8" or menu_command == "koniec":
         with open("data_amount_in_account.txt", "w") as file_stream:
             file_stream.write(str(amount_in_account))
+
+        with open("warehouse.json", "w") as file_stream:
+            file_stream.write(dumps(warehouse))
 
         print("Poporawnie zapisano dane.")
         break

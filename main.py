@@ -1,5 +1,6 @@
 from datetime import datetime
 from json import dumps, loads
+from json.decoder import JSONDecodeError
 
 print("\n*** Prosty system księgowy/magazyn ***\n")
 
@@ -18,26 +19,42 @@ operation_history = []
 # Odczytanie danych z plików
 try:
     with open("data_amount_in_account.txt") as file_stream:
-        amount_in_account = file_stream.readline()
+        amount_txt_data = file_stream.readline()
+
+        if not amount_txt_data:
+            pass
+        else:
+            amount_in_account = amount_txt_data
 except FileNotFoundError:
     print("Nie pobrano danych z pliku.")
-
-try:
-    amount_in_account = float(amount_in_account)
-except ValueError:
-    print("Niepoprawne dane wejściowe.")
 
 try:
     with open("warehouse.json") as file_stream:
-        warehouse = loads(file_stream.read())
+        warehouse_txt_data = file_stream.read()
+
+        if not warehouse_txt_data:
+            pass
+            print("Plik jest pusty.")
+        else:
+            warehouse = loads(warehouse_txt_data)
 except FileNotFoundError:
     print("Nie pobrano danych z pliku.")
+except JSONDecodeError as e:
+    print(f"Wystąpił nieoczekiwany błąd {e}.")
 
 try:
     with open("operation_history.json") as file_stream:
-        operation_history = loads(file_stream.read())
+        operation_history_txt_data = file_stream.read()
+
+        if not operation_history_txt_data:
+            pass
+            print("Plik jest pusty.")
+        else:
+            operation_history = loads(operation_history_txt_data)
 except FileNotFoundError:
     print("Nie pobrano danych z pliku.")
+except JSONDecodeError as e:
+    print(f"Wystąpił nieoczekiwany błąd {e}.")
 
 while True:
     menu_command = input("""
@@ -273,7 +290,7 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
         with open("operation_history.json", "w") as file_stream:
             file_stream.write(dumps(operation_history))
 
-        print("Poporawnie zapisano dane.")
+        print("Poprawnie zapisano dane.")
         break
 
     else:

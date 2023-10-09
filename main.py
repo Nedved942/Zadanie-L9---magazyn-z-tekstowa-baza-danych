@@ -21,10 +21,9 @@ try:
     with open("data_amount_in_account.txt") as file_stream:
         amount_txt_data = file_stream.readline()
 
-        if not amount_txt_data:
-            pass
-        else:
+        if amount_txt_data:
             amount_in_account = amount_txt_data
+
 except FileNotFoundError:
     print("Nie pobrano danych z pliku.")
 
@@ -33,7 +32,6 @@ try:
         warehouse_txt_data = file_stream.read()
 
         if not warehouse_txt_data:
-            pass
             print("Plik jest pusty.")
         else:
             warehouse = loads(warehouse_txt_data)
@@ -69,7 +67,7 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
 8 - koniec
 """)
 
-    if menu_command == "1" or menu_command == "saldo":
+    if menu_command == ["1", "saldo"]:
         # Dodanie lub odjęcie wartości od kwoty na koncie
         difference_in_account = input("Podaj kwotę do dodania lub odjęcia z konta: ")
         try:
@@ -78,7 +76,7 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
             print("Błąd - Należy podać liczbę.")
             continue
 
-        amount_in_account = amount_in_account + difference_in_account
+        amount_in_account += difference_in_account
 
         # Aktualizacja historii operacji
         operation_history.append({"Nazwa operacji": "Saldo",
@@ -89,7 +87,7 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
                                       ),
                                   "Data operacji": give_operation_date()})
 
-    elif menu_command == "2" or menu_command == "sprzedaż":
+    elif menu_command in ["2", "sprzedaż"]:
         # Wprowadzenie danych
         product_to_sell_name = input("Podaj nazwę produktu, który chcesz sprzedać: ")
         if product_to_sell_name not in warehouse:
@@ -138,7 +136,7 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
                                       ),
                                   "Data operacji": give_operation_date()})
 
-    elif menu_command == "3" or menu_command == "zakup":
+    elif menu_command == ["3", "zakup"]:
         # Wprowadzenie danych
         product_to_buy_name = input("Podaj nazwę zakupionego produktu: ")
         if product_to_buy_name in warehouse:
@@ -199,11 +197,11 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
                                       ),
                                   "Data operacji": give_operation_date()})
 
-    elif menu_command == "4" or menu_command == "konto":
+    elif menu_command == ["4", "konto"]:
         # Wyświetla aktualny stan konta
         print("Kwota na koncie wynosi: ", amount_in_account)
 
-    elif menu_command == "5" or menu_command == "lista":
+    elif menu_command == ["5", "lista"]:
         # Wyświetla całkowity stan magazynu
         print("Stan magazynu: ")
         for index, name in enumerate(warehouse):
@@ -211,7 +209,7 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
                   f"  cena: {warehouse[name]['price']}\n"
                   f"  ilość: {warehouse[name]['amount']}")
 
-    elif menu_command == "6" or menu_command == "magazyn":
+    elif menu_command == ["6", "magazyn"]:
         # Wyświetla ilość wskazanego produktu
         product_to_display = input("Podaj nazwę produktu do wyświetlenia: ")
         if product_to_display not in warehouse:
@@ -220,7 +218,7 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
         print(f"Ilość powyższego produktu w magazynie to "
               f"{warehouse[product_to_display]['amount']} szt.")
 
-    elif menu_command == "7" or menu_command == "przegląd":
+    elif menu_command == ["7", "przegląd"]:
         # # Przykładowy wpis
         # operation_history = [{"Nazwa operacji": "Saldo",
         #                       "Opis operacji":
@@ -280,7 +278,7 @@ Wybierz jedno z poniższych poleceń (możesz wpisać także numer):
                 print(f'{index + 1}. {operation["Nazwa operacji"]} {justify_operation_date}\n'
                       f'{operation["Opis operacji"]}')
 
-    elif menu_command == "8" or menu_command == "koniec":
+    elif menu_command == ["8", "koniec"]:
         with open("data_amount_in_account.txt", "w") as file_stream:
             file_stream.write(str(amount_in_account))
 
